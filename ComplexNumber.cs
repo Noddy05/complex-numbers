@@ -134,9 +134,9 @@ namespace ComplexNumbers
             return new ComplexNumber(a, b);
         }
         public static ComplexNumber operator /(ComplexNumber z, float c) => new ComplexNumber(z.a / c, z.b / c);
-        public static ComplexNumber operator /(float c, ComplexNumber z) => new ComplexNumber(z.a / c, z.b / c);
+        public static ComplexNumber operator /(float c, ComplexNumber z) => c * z.Pow(-1);
         public static ComplexNumber operator /(ComplexNumber z, int c) => new ComplexNumber(z.a / c, z.b / c);
-        public static ComplexNumber operator /(int c, ComplexNumber z) => new ComplexNumber(z.a / c, z.b / c);
+        public static ComplexNumber operator /(int c, ComplexNumber z) => c * z.Pow(-1);
         public static ComplexNumber operator /(ComplexNumber z1, ComplexNumber z2)
         {
             (float r1, float theta1) = z1.ToPolar();

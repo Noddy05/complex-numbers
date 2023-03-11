@@ -49,6 +49,26 @@ namespace ComplexNumbers
         }
 
         /// <summary>
+        /// Raises a real number to a complex power.
+        /// </summary>
+        public static ComplexNumber Pow(float c, ComplexNumber complexPower)
+        {
+            float newA = MathF.Cos(complexPower.b * MathF.Log(c));
+            float newB = MathF.Sin(complexPower.b * MathF.Log(c));
+            return MathF.Pow(c, complexPower.a) * new ComplexNumber(newA, newB);
+        }
+
+        /// <summary>
+        /// Raises a real number to a complex power.
+        /// </summary>
+        public static ComplexNumber Pow(int c, ComplexNumber complexPower)
+        {
+            float newA = MathF.Cos(complexPower.b * MathF.Log(c));
+            float newB = MathF.Sin(complexPower.b * MathF.Log(c));
+            return MathF.Pow(c, complexPower.a) * new ComplexNumber(newA, newB);
+        }
+
+        /// <summary>
         /// Returns the conjugate of a complex number.
         /// </summary>
         public ComplexNumber Conj()
@@ -66,6 +86,9 @@ namespace ComplexNumbers
             float roundedA = MathF.Round(a * 100000) / 100000;
             float roundedB = MathF.Round(b * 100000) / 100000;
             outputString += roundedA;
+
+            if (roundedB == 0)
+                return outputString + ")";
 
             if (roundedB >= 0)
                 outputString += $" + {roundedB}i)";
@@ -90,6 +113,7 @@ namespace ComplexNumbers
         public static ComplexNumber operator +(ComplexNumber z, int c) => new ComplexNumber(z.a + c, z.b);
         public static ComplexNumber operator +(int c, ComplexNumber z) => new ComplexNumber(z.a + c, z.b);
         public static ComplexNumber operator +(ComplexNumber z1, ComplexNumber z2) => new ComplexNumber(z1.a + z2.a, z1.b + z2.b);
+        public static ComplexNumber operator -(ComplexNumber z) => new ComplexNumber(-z.a, -z.b);
         public static ComplexNumber operator -(ComplexNumber z, float c) => new ComplexNumber(z.a - c, z.b);
         public static ComplexNumber operator -(float c, ComplexNumber z) => new ComplexNumber(z.a - c, z.b);
         public static ComplexNumber operator -(ComplexNumber z, int c) => new ComplexNumber(z.a - c, z.b);

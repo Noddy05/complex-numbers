@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Complex_Numbers
+namespace ComplexNumbers
 {
     struct ComplexNumber
     {
@@ -63,11 +63,11 @@ namespace Complex_Numbers
         public override string ToString()
         {
             string outputString = "(";
-            float roundedA = MathF.Round(a * 1000) / 1000;
-            float roundedB = MathF.Round(b * 1000) / 1000;
+            float roundedA = MathF.Round(a * 100000) / 100000;
+            float roundedB = MathF.Round(b * 100000) / 100000;
             outputString += roundedA;
 
-            if (roundedB > 0)
+            if (roundedB >= 0)
                 outputString += $" + {roundedB}i)";
             else
                 outputString += $" - {-roundedB}i)";
@@ -76,7 +76,7 @@ namespace Complex_Numbers
                 return outputString;
 
 
-            if (roundedB > 0)
+            if (roundedB >= 0)
                 outputString = $"({roundedB}i)";
             else
                 outputString = $"({-roundedB}i)";
@@ -86,13 +86,19 @@ namespace Complex_Numbers
 
         #region Operators
         public static ComplexNumber operator +(ComplexNumber z, float c) => new ComplexNumber(z.a + c, z.b);
+        public static ComplexNumber operator +(float c, ComplexNumber z) => new ComplexNumber(z.a + c, z.b);
         public static ComplexNumber operator +(ComplexNumber z, int c) => new ComplexNumber(z.a + c, z.b);
+        public static ComplexNumber operator +(int c, ComplexNumber z) => new ComplexNumber(z.a + c, z.b);
         public static ComplexNumber operator +(ComplexNumber z1, ComplexNumber z2) => new ComplexNumber(z1.a + z2.a, z1.b + z2.b);
         public static ComplexNumber operator -(ComplexNumber z, float c) => new ComplexNumber(z.a - c, z.b);
+        public static ComplexNumber operator -(float c, ComplexNumber z) => new ComplexNumber(z.a - c, z.b);
         public static ComplexNumber operator -(ComplexNumber z, int c) => new ComplexNumber(z.a - c, z.b);
+        public static ComplexNumber operator -(int c, ComplexNumber z) => new ComplexNumber(z.a - c, z.b);
         public static ComplexNumber operator -(ComplexNumber z1, ComplexNumber z2) => new ComplexNumber(z1.a - z2.a, z1.b - z2.b);
         public static ComplexNumber operator *(ComplexNumber z, float c) => new ComplexNumber(z.a * c, z.b * c);
+        public static ComplexNumber operator *(float c, ComplexNumber z) => new ComplexNumber(z.a * c, z.b * c);
         public static ComplexNumber operator *(ComplexNumber z, int c) => new ComplexNumber(z.a * c, z.b * c);
+        public static ComplexNumber operator *(int c, ComplexNumber z) => new ComplexNumber(z.a * c, z.b * c);
         public static ComplexNumber operator *(ComplexNumber z1, ComplexNumber z2)
         {
             (float r1, float theta1) = z1.ToPolar();
@@ -104,7 +110,9 @@ namespace Complex_Numbers
             return new ComplexNumber(a, b);
         }
         public static ComplexNumber operator /(ComplexNumber z, float c) => new ComplexNumber(z.a / c, z.b / c);
+        public static ComplexNumber operator /(float c, ComplexNumber z) => new ComplexNumber(z.a / c, z.b / c);
         public static ComplexNumber operator /(ComplexNumber z, int c) => new ComplexNumber(z.a / c, z.b / c);
+        public static ComplexNumber operator /(int c, ComplexNumber z) => new ComplexNumber(z.a / c, z.b / c);
         public static ComplexNumber operator /(ComplexNumber z1, ComplexNumber z2)
         {
             (float r1, float theta1) = z1.ToPolar();
@@ -116,7 +124,9 @@ namespace Complex_Numbers
             return new ComplexNumber(a, b);
         }
         public static ComplexNumber operator %(ComplexNumber z, float c) => new ComplexNumber(z.a % c, z.b % c);
+        public static ComplexNumber operator %(float c, ComplexNumber z) => new ComplexNumber(z.a % c, z.b % c);
         public static ComplexNumber operator %(ComplexNumber z, int c) => new ComplexNumber(z.a % c, z.b % c);
+        public static ComplexNumber operator %(int c, ComplexNumber z) => new ComplexNumber(z.a % c, z.b % c);
         public static ComplexNumber operator %(ComplexNumber z1, ComplexNumber z2) => new ComplexNumber(z1.a % z2.a, z1.b % z2.b);
         public static ComplexNumber operator ++(ComplexNumber z1) => new ComplexNumber(z1.a++, z1.b++);
         public static ComplexNumber operator --(ComplexNumber z1) => new ComplexNumber(z1.a--, z1.b--);

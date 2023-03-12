@@ -21,11 +21,18 @@ namespace ComplexNumbers
         }
 
         /// <summary>
-        /// Returns a complex number representing the length and angle of the original complex number
+        /// Returns a float representing the complex numbers distance from the origin (√a²+b²)
         /// </summary>
         public float Magnitude() => MathF.Sqrt(a * a + b * b);
+        /// <summary>
+        /// Returns a float representing the angle of the complex number (Atan2(b, a))
+        /// </summary>
         public float Angle() => MathF.Atan2(b, a);
 
+        /// <summary>
+        /// Returns the distance between the origin and the complex number (r = √a²+b²).
+        /// Also returns the angle of the complex number (theta = Atan2(b, a))
+        /// </summary>
         public (float r, float theta) ToPolar()
         {
             float r = Magnitude();
@@ -33,8 +40,39 @@ namespace ComplexNumbers
 
             return (r, theta);
         }
-        public ComplexNumber Normalize() => new ComplexNumber(a, b) / Magnitude();
-        public static void Normalize(ComplexNumber z) => z /= z.Magnitude();
+        /// <summary>
+        /// Normalized a complex number, so its distance from the origin is 1;
+        /// </summary>
+        public ComplexNumber Normalize()
+        {
+            float mag = Magnitude();
+            if (mag == 0)
+                throw new DivideByZeroException();
+
+            return new ComplexNumber(a, b) / mag;
+        }
+        /// <summary>
+        /// Normalized a complex number, so its distance from the origin is 1;
+        /// </summary>
+        public static void Normalize(ref ComplexNumber z)
+        {
+            float mag = z.Magnitude();
+            if (mag == 0)
+                throw new DivideByZeroException();
+
+            z /= mag;
+        }
+        /// <summary>
+        /// Normalized a complex number, so its distance from the origin is 1;
+        /// </summary>
+        public static ComplexNumber Normalize(ComplexNumber z)
+        {
+            float mag = z.Magnitude();
+            if (mag == 0)
+                throw new DivideByZeroException();
+
+            return z / mag;
+        }
 
         /// <summary>
         /// Raises a complex number to any power.
@@ -113,12 +151,14 @@ namespace ComplexNumbers
         public static ComplexNumber operator +(ComplexNumber z, int c) => new ComplexNumber(z.a + c, z.b);
         public static ComplexNumber operator +(int c, ComplexNumber z) => new ComplexNumber(z.a + c, z.b);
         public static ComplexNumber operator +(ComplexNumber z1, ComplexNumber z2) => new ComplexNumber(z1.a + z2.a, z1.b + z2.b);
+
         public static ComplexNumber operator -(ComplexNumber z) => new ComplexNumber(-z.a, -z.b);
         public static ComplexNumber operator -(ComplexNumber z, float c) => new ComplexNumber(z.a - c, z.b);
         public static ComplexNumber operator -(float c, ComplexNumber z) => new ComplexNumber(z.a - c, z.b);
         public static ComplexNumber operator -(ComplexNumber z, int c) => new ComplexNumber(z.a - c, z.b);
         public static ComplexNumber operator -(int c, ComplexNumber z) => new ComplexNumber(z.a - c, z.b);
         public static ComplexNumber operator -(ComplexNumber z1, ComplexNumber z2) => new ComplexNumber(z1.a - z2.a, z1.b - z2.b);
+
         public static ComplexNumber operator *(ComplexNumber z, float c) => new ComplexNumber(z.a * c, z.b * c);
         public static ComplexNumber operator *(float c, ComplexNumber z) => new ComplexNumber(z.a * c, z.b * c);
         public static ComplexNumber operator *(ComplexNumber z, int c) => new ComplexNumber(z.a * c, z.b * c);
@@ -133,6 +173,7 @@ namespace ComplexNumbers
 
             return new ComplexNumber(a, b);
         }
+
         public static ComplexNumber operator /(ComplexNumber z, float c) => new ComplexNumber(z.a / c, z.b / c);
         public static ComplexNumber operator /(float c, ComplexNumber z) => c * z.Pow(-1);
         public static ComplexNumber operator /(ComplexNumber z, int c) => new ComplexNumber(z.a / c, z.b / c);
@@ -147,13 +188,18 @@ namespace ComplexNumbers
 
             return new ComplexNumber(a, b);
         }
+
         public static ComplexNumber operator %(ComplexNumber z, float c) => new ComplexNumber(z.a % c, z.b % c);
         public static ComplexNumber operator %(float c, ComplexNumber z) => new ComplexNumber(z.a % c, z.b % c);
         public static ComplexNumber operator %(ComplexNumber z, int c) => new ComplexNumber(z.a % c, z.b % c);
         public static ComplexNumber operator %(int c, ComplexNumber z) => new ComplexNumber(z.a % c, z.b % c);
         public static ComplexNumber operator %(ComplexNumber z1, ComplexNumber z2) => new ComplexNumber(z1.a % z2.a, z1.b % z2.b);
+
         public static ComplexNumber operator ++(ComplexNumber z1) => new ComplexNumber(z1.a++, z1.b++);
         public static ComplexNumber operator --(ComplexNumber z1) => new ComplexNumber(z1.a--, z1.b--);
+
+        public static explicit operator ComplexNumber((float r, float theta)polar) 
+            => new ComplexNumber(polar.r * MathF.Cos(polar.theta), polar.r * MathF.Sin(polar.theta));
         #endregion
     }
 }

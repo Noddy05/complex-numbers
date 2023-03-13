@@ -27,7 +27,13 @@ namespace ComplexNumbers
             Console.WriteLine($"z renormalized: {z}\n");
 
             ComplexNumber z3 = (ComplexNumber)(1f, MathF.PI / 2);
-            Console.WriteLine($"Polar to complex number: {z3}");
+            Console.WriteLine($"Polar to complex number: {z3}\n");
+
+            ComplexNumber iToTheI = new ComplexNumber(0, 1).Pow(new ComplexNumber(0, 1));
+            Console.WriteLine($"i^i: {iToTheI}");
+
+            ComplexNumber complexRaisedToComplex = new ComplexNumber(MathF.PI, MathF.E).Pow(new ComplexNumber(MathF.Sqrt(2), 1));
+            Console.WriteLine($"(pi + ei)^(sqrt(2) + i): {complexRaisedToComplex}");
 
             while (true) ;
         }

@@ -5,10 +5,13 @@ namespace ComplexNumbers
     struct ComplexNumber
     {
         /// <summary>
-        /// The component 'a' (Sometimes called 'x') is the real part of the complex number.
+        /// The component 'a' (Sometimes called 'x') is the real part of the complex number.<br></br>
+        /// </summary>
+        public float a;
+        /// <summary>
         /// The component 'b' (Sometimes called 'y') is the imaginary part of the complex number.
         /// </summary>
-        public float a, b;
+        public float b;
 
         /// <summary>
         /// The component 'a' (Sometimes called 'x') is the real part of the complex number.
@@ -19,19 +22,33 @@ namespace ComplexNumbers
             this.a = a;
             this.b = b;
         }
+        /// <summary>
+        /// Makes a complex number with a distance from center of 1, and an angle of t.<br></br><br></br>
+        /// Formula:<br></br>
+        /// e^(it) = cos(t) + i * sin(t).
+        /// </summary>
+        public ComplexNumber(float t)
+        {
+            a = MathF.Cos(t);
+            b = MathF.Sin(t);
+        }
 
         /// <summary>
-        /// Returns a float representing the complex numbers distance from the origin (√a²+b²)
+        /// Returns a float representing the complex numbers distance from the origin.<br></br><br></br>
+        /// Formula: <br></br>
+        /// √a²+b².
         /// </summary>
         public float Magnitude() => MathF.Sqrt(a * a + b * b);
         /// <summary>
-        /// Returns a float representing the angle of the complex number (Atan2(b, a))
+        /// Returns a float representing the angle of the complex number.<br></br><br></br>
+        /// Formula: <br></br>
+        /// arctan(y / x).
         /// </summary>
         public float Angle() => MathF.Atan2(b, a);
 
         /// <summary>
         /// Returns the distance between the origin and the complex number (r = √a²+b²).
-        /// Also returns the angle of the complex number (theta = Atan2(b, a))
+        /// Also returns the angle of the complex number (theta = Atan2(b, a)).
         /// </summary>
         public (float r, float theta) ToPolar()
         {
@@ -41,7 +58,9 @@ namespace ComplexNumbers
             return (r, theta);
         }
         /// <summary>
-        /// Normalized a complex number, so its distance from the origin is 1;
+        /// Normalized a complex number, so its distance from the origin is 1.<br><br></br></br>
+        /// Formula:<br></br>
+        /// z / z.Magnitude().
         /// </summary>
         public ComplexNumber Normalize()
         {
@@ -52,7 +71,9 @@ namespace ComplexNumbers
             return new ComplexNumber(a, b) / mag;
         }
         /// <summary>
-        /// Normalized a complex number, so its distance from the origin is 1;
+        /// Normalized a complex number, so its distance from the origin is 1.<br><br></br></br>
+        /// Formula:<br></br>
+        /// z / z.Magnitude().
         /// </summary>
         public static void Normalize(ref ComplexNumber z)
         {
@@ -63,7 +84,9 @@ namespace ComplexNumbers
             z /= mag;
         }
         /// <summary>
-        /// Normalized a complex number, so its distance from the origin is 1;
+        /// Normalized a complex number, so its distance from the origin is 1.<br><br></br></br>
+        /// Formula:<br></br>
+        /// z / z.Magnitude().
         /// </summary>
         public static ComplexNumber Normalize(ComplexNumber z)
         {
@@ -107,7 +130,39 @@ namespace ComplexNumbers
         }
 
         /// <summary>
-        /// Returns the conjugate of a complex number.
+        /// Raises a complex number to a complex power.<br></br><br></br>
+        /// Formula:<br></br>
+        /// (r₁ * e^(it₁))^(r₂ * e^(it₂)) = r₁^(r₂ * e^(it₂)) * e^(it₁ * r₂ * e^(it₂))<br></br>
+        /// Multiplying e^(it₂) by i is the same as taking its conjugate and then swapping a and b.
+        /// </summary>
+        public static ComplexNumber Pow(ComplexNumber z, ComplexNumber complexPower)
+        {
+            (float r1, float t1) = z.ToPolar();
+            (float r2, float t2) = complexPower.ToPolar();
+
+            ComplexNumber rPart = Pow(r1, r2 * new ComplexNumber(t2));
+            ComplexNumber ePart = Pow(MathF.E, t1 * r2 * new ComplexNumber(t2).Conj().Reversed());
+            return rPart * ePart;
+        }
+        /// <summary>
+        /// Raises a complex number to a complex power.<br></br><br></br>
+        /// Formula:<br></br>
+        /// (r₁ * e^(it₁))^(r₂ * e^(it₂)) = r₁^(r₂ * e^(it₂)) * e^(it₁ * r₂ * e^(it₂))<br></br>
+        /// </summary>
+        public ComplexNumber Pow(ComplexNumber complexPower)
+        {
+            (float r1, float t1) = ToPolar();
+            (float r2, float t2) = complexPower.ToPolar();
+
+            ComplexNumber rPart = Pow(r1, r2 * new ComplexNumber(t2));
+            // Multiplying e^(it₂) by i is the same as taking its conjugate and then swapping a and b.
+            ComplexNumber ePart = Pow(MathF.E, t1 * r2 * new ComplexNumber(t2).Conj().Reversed());
+            return rPart * ePart;
+        }
+
+        /// <summary>
+        /// Returns the conjugate of a complex number.<br></br>
+        /// (Multiplies the imaginary component by (-1))
         /// </summary>
         public ComplexNumber Conj()
         {
@@ -115,7 +170,15 @@ namespace ComplexNumbers
         }
 
         /// <summary>
-        /// Returns a complex number as a string. 
+        /// Swaps the values of a and b in a complex number.
+        /// </summary>
+        public ComplexNumber Reversed()
+        {
+            return new ComplexNumber(b, a);
+        }
+
+        /// <summary>
+        /// Returns a complex number as a string.
         /// Format: (a + bi)
         /// </summary>
         public override string ToString()
@@ -151,7 +214,6 @@ namespace ComplexNumbers
         public static ComplexNumber operator +(ComplexNumber z, int c) => new ComplexNumber(z.a + c, z.b);
         public static ComplexNumber operator +(int c, ComplexNumber z) => new ComplexNumber(z.a + c, z.b);
         public static ComplexNumber operator +(ComplexNumber z1, ComplexNumber z2) => new ComplexNumber(z1.a + z2.a, z1.b + z2.b);
-
         public static ComplexNumber operator -(ComplexNumber z) => new ComplexNumber(-z.a, -z.b);
         public static ComplexNumber operator -(ComplexNumber z, float c) => new ComplexNumber(z.a - c, z.b);
         public static ComplexNumber operator -(float c, ComplexNumber z) => new ComplexNumber(z.a - c, z.b);

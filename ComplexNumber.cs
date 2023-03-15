@@ -4,6 +4,8 @@ namespace ComplexNumbers
 {
     struct ComplexNumber
     {
+        public static readonly ComplexNumber i = new ComplexNumber(0, 1);
+
         /// <summary>
         /// The component 'a' (Sometimes called 'x') is the real part of the complex number.<br></br>
         /// </summary>
@@ -141,13 +143,13 @@ namespace ComplexNumbers
             (float r2, float t2) = complexPower.ToPolar();
 
             ComplexNumber rPart = Pow(r1, r2 * new ComplexNumber(t2));
-            ComplexNumber ePart = Pow(MathF.E, t1 * r2 * new ComplexNumber(t2).Conj().Reversed());
+            ComplexNumber ePart = Pow(MathF.E, t1 * r2 * new ComplexNumber(t2).Conj().Swapped());
             return rPart * ePart;
         }
         /// <summary>
         /// Raises a complex number to a complex power.<br></br><br></br>
         /// Formula:<br></br>
-        /// (r₁ * e^(it₁))^(r₂ * e^(it₂)) = r₁^(r₂ * e^(it₂)) * e^(it₁ * r₂ * e^(it₂))<br></br>
+        /// (r₁ * e^(it₁))^(r₂ * e^(it₂)) = r₁^(r₂ * e^(it₂)) * e^(it₁ * r₂ * e^(it₂))
         /// </summary>
         public ComplexNumber Pow(ComplexNumber complexPower)
         {
@@ -156,8 +158,38 @@ namespace ComplexNumbers
 
             ComplexNumber rPart = Pow(r1, r2 * new ComplexNumber(t2));
             // Multiplying e^(it₂) by i is the same as taking its conjugate and then swapping a and b.
-            ComplexNumber ePart = Pow(MathF.E, t1 * r2 * new ComplexNumber(t2).Conj().Reversed());
+            ComplexNumber ePart = Pow(MathF.E, t1 * r2 * new ComplexNumber(t2).Conj().Swapped());
             return rPart * ePart;
+        }
+
+        /// <summary>
+        /// Returns the sine of a complex number.<br></br><br></br>
+        /// Formula:<br></br>
+        /// 1 / 2i * (e^(iz) - e^(-iz)).
+        /// </summary>
+        public static ComplexNumber Sin(ComplexNumber z)
+        {
+            return -0.5f * i * (Pow(MathF.E, z.Conj().Swapped()) - Pow(MathF.E, -z.Conj().Swapped()));
+        }
+
+        /// <summary>
+        /// Returns the cosine of a complex number.<br></br><br></br>
+        /// Formula:<br></br>
+        /// 1 / 2i * (e^(i(z + π / 2)) - e^(-i(z + π / 2))).
+        /// </summary>
+        public static ComplexNumber Cos(ComplexNumber z)
+        {
+            return -0.5f * i * (Pow(MathF.E, (z + MathF.PI / 2).Conj().Swapped()) - Pow(MathF.E, -(z + MathF.PI / 2).Conj().Swapped()));
+        }
+
+        /// <summary>
+        /// Returns the cosine of a complex number.<br></br><br></br>
+        /// Formula:<br></br>
+        /// sin(z) / cos(z).
+        /// </summary>
+        public static ComplexNumber Tan(ComplexNumber z)
+        {
+            return Sin(z) / Cos(z);
         }
 
         /// <summary>
@@ -172,7 +204,7 @@ namespace ComplexNumbers
         /// <summary>
         /// Swaps the values of a and b in a complex number.
         /// </summary>
-        public ComplexNumber Reversed()
+        public ComplexNumber Swapped()
         {
             return new ComplexNumber(b, a);
         }

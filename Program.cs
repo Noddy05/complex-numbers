@@ -33,7 +33,12 @@ namespace ComplexNumbers
             Console.WriteLine($"i^i: {iToTheI}");
 
             ComplexNumber complexRaisedToComplex = new ComplexNumber(MathF.PI, MathF.E).Pow(new ComplexNumber(MathF.Sqrt(2), 1));
-            Console.WriteLine($"(pi + ei)^(sqrt(2) + i): {complexRaisedToComplex}");
+            Console.WriteLine($"(pi + ei)^(sqrt(2) + i): {complexRaisedToComplex}\n");
+
+            ComplexNumber complexTrigonometri = new ComplexNumber(0.63f, 0.5f);
+            Console.WriteLine($"sin{complexTrigonometri}: {ComplexNumber.Sin(complexTrigonometri)}\n");
+            Console.WriteLine($"cos{complexTrigonometri}: {ComplexNumber.Cos(complexTrigonometri)}\n");
+            Console.WriteLine($"tan{complexTrigonometri}: {ComplexNumber.Tan(complexTrigonometri)}\n");
 
             while (true) ;
         }

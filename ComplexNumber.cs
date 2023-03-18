@@ -193,6 +193,32 @@ namespace ComplexNumbers
         }
 
         /// <summary>
+        /// Returns inverted value of a complex number.<br></br><br></br>
+        /// </summary>
+        public static ComplexNumber CircleInversion(ComplexNumber z)
+        {
+            return z / (z.a * z.a + z.b * z.b);
+        }
+
+        /// <summary>
+        /// Returns inverted value of a complex number.<br></br><br></br>
+        /// </summary>
+        public static ComplexNumber CircleInversion(ComplexNumber z, ComplexNumber circleCenter)
+        {
+            ComplexNumber centerToZ = z - circleCenter;
+            return centerToZ / (centerToZ.a * centerToZ.a + centerToZ.b * centerToZ.b);
+        }
+
+        /// <summary>
+        /// Returns inverted value of a complex number.<br></br><br></br>
+        /// </summary>
+        public static ComplexNumber CircleInversion(ComplexNumber z, ComplexNumber circleCenter, float radius)
+        {
+            ComplexNumber centerToZ = z - circleCenter;
+            return centerToZ * radius * radius / (centerToZ.a * centerToZ.a + centerToZ.b * centerToZ.b);
+        }
+
+        /// <summary>
         /// Returns the conjugate of a complex number.<br></br>
         /// (Multiplies the imaginary component by (-1))
         /// </summary>

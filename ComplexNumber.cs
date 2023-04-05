@@ -175,11 +175,11 @@ namespace ComplexNumbers
         /// <summary>
         /// Returns the cosine of a complex number.<br></br><br></br>
         /// Formula:<br></br>
-        /// 1 / 2i * (e^(i(z + π / 2)) - e^(-i(z + π / 2))).
+        /// 1 / 2 * (e^(i(z)) + e^(-i(z))).
         /// </summary>
         public static ComplexNumber Cos(ComplexNumber z)
         {
-            return -0.5f * i * (Pow(MathF.E, (z + MathF.PI / 2).Conj().Swapped()) - Pow(MathF.E, -(z + MathF.PI / 2).Conj().Swapped()));
+            return 0.5f * (Pow(MathF.E, z.Conj().Swapped()) + Pow(MathF.E, -z.Conj().Swapped()));
         }
 
         /// <summary>
@@ -190,6 +190,60 @@ namespace ComplexNumbers
         public static ComplexNumber Tan(ComplexNumber z)
         {
             return Sin(z) / Cos(z);
+        }
+
+        /// <summary>
+        /// Returns natural logarithm of a complex number.<br></br><br></br>
+        /// Formula:<br></br>
+        /// ln(r) + it.
+        /// </summary>
+        public static ComplexNumber Ln(ComplexNumber z)
+        {
+            float r = z.Magnitude();
+            float theta = z.Angle();
+
+            return new ComplexNumber(MathF.Log(r), theta);
+        }
+
+        /// <summary>
+        /// Returns logarithm (with a real base) of a complex number.<br></br><br></br>
+        /// Formula:<br></br>
+        /// (ln(r) + it) / ln(base).
+        /// </summary>
+        public static ComplexNumber Log(float realBase, ComplexNumber z)
+        {
+            float r = z.Magnitude();
+            float theta = z.Angle();
+
+            return new ComplexNumber(MathF.Log(r), theta) / MathF.Log(realBase);
+        }
+
+        /// <summary>
+        /// Returns logarithm (with a complex base) of a real number.<br></br><br></br>
+        /// Formula:<br></br>
+        /// ln(c) / ln(r) + it).
+        /// </summary>
+        public static ComplexNumber Log(ComplexNumber complexBase, float c)
+        {
+            float r = complexBase.Magnitude();
+            float theta = complexBase.Angle();
+
+            return MathF.Log(c) / new ComplexNumber(MathF.Log(r), theta);
+        }
+
+        /// <summary>
+        /// Returns logarithm (with a complex base) of a complex number.<br></br><br></br>
+        /// Formula:<br></br>
+        /// (ln(r) + it) / ln(base).
+        /// </summary>
+        public static ComplexNumber Log(ComplexNumber complexBase, ComplexNumber z)
+        {
+            float r1 = complexBase.Magnitude();
+            float theta1 = complexBase.Angle();
+            float r2 = z.Magnitude();
+            float theta2 = z.Angle();
+
+            return new ComplexNumber(MathF.Log(r2), theta2) / new ComplexNumber(MathF.Log(r1), theta1);
         }
 
         /// <summary>

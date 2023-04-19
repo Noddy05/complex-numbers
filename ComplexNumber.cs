@@ -4,8 +4,8 @@ namespace ComplexNumbers
 {
     struct ComplexNumber
     {
+        #region Instantiation
         public static readonly ComplexNumber i = new ComplexNumber(0, 1);
-
         /// <summary>
         /// The component 'a' (Sometimes called 'x') is the real part of the complex number.<br></br>
         /// </summary>
@@ -34,7 +34,9 @@ namespace ComplexNumbers
             a = MathF.Cos(t);
             b = MathF.Sin(t);
         }
+        #endregion
 
+        #region Properties
         public static float Re(ComplexNumber z) => z.a;
         public static float Im(ComplexNumber z) => z.b;
 
@@ -63,6 +65,26 @@ namespace ComplexNumbers
 
             return (r, theta);
         }
+        #endregion
+
+        #region Modifications
+        /// <summary>
+        /// Returns the conjugate of a complex number.<br></br>
+        /// (Multiplies the imaginary component by (-1))
+        /// </summary>
+        public ComplexNumber Conj()
+        {
+            return new ComplexNumber(a, -b);
+        }
+
+        /// <summary>
+        /// Swaps the values of a and b in a complex number.
+        /// </summary>
+        public ComplexNumber Swapped()
+        {
+            return new ComplexNumber(b, a);
+        }
+
         /// <summary>
         /// Normalized a complex number, so its distance from the origin is 1.<br><br></br></br>
         /// Formula:<br></br>
@@ -111,7 +133,11 @@ namespace ComplexNumbers
 
             return z / mag;
         }
+        #endregion
 
+        #region Operations
+
+        #region Exponentiation
         /// <summary>
         /// Raises a complex number to any power.
         /// </summary>
@@ -174,7 +200,9 @@ namespace ComplexNumbers
             ComplexNumber ePart = Pow(MathF.E, t1 * r2 * new ComplexNumber(t2).Conj().Swapped());
             return rPart * ePart;
         }
+        #endregion
 
+        #region Trigonometry
         /// <summary>
         /// Returns the sine of a complex number.<br></br><br></br>
         /// Formula:<br></br>
@@ -204,7 +232,9 @@ namespace ComplexNumbers
         {
             return Sin(z) / Cos(z);
         }
+        #endregion
 
+        #region Logarithmic Functions
         /// <summary>
         /// Returns natural logarithm of a complex number.<br></br><br></br>
         /// Formula:<br></br>
@@ -261,10 +291,7 @@ namespace ComplexNumbers
 
         /// <summary>
         /// Returns the product log of a complex number.<br></br><br></br>
-        /// Formula:<br></br>
-        /// (ln(r) + it) / ln(base).
         /// </summary>
-
         public static ComplexNumber ProductLog(ComplexNumber z)
         {
             ComplexNumber z_n = new(1, 1);
@@ -312,7 +339,9 @@ namespace ComplexNumbers
             return z_n;
         }
 
-        private static int passes = 0;
+        /// <summary>
+        /// Returns the product log of a real number.<br></br><br></br>
+        /// </summary>
         public static float ProductLog(float x)
         {
             float x_n = 1;
@@ -351,7 +380,42 @@ namespace ComplexNumbers
 
             return x_n;
         }
+        #endregion
 
+        #region Calculus
+
+        /// <summary>
+        /// Returns a very rough estimation of the factorial factorial of a complex number.<br></br><br></br>
+        /// </summary>
+        public static void Factorial(ComplexNumber input)
+        {
+            //double r = SpecialFunctions.Gamma(input);
+            ComplexNumber[] d = new ComplexNumber[] { 
+                new(2.48574089138753565546f * MathF.Pow(10, -5), 0),
+                new(1.05142378581721974210f, 0),
+                new(-3.45687097222016235469f, 0),
+                new(4.51227709466894823700f, 0),
+                new(-2.98285225323576655721f, 0),
+                new(1.05639711577126713077f, 0),
+                new(-1.95428773191645869583f * MathF.Pow(10, -1), 0),
+                new(1.70970543404441224307f * MathF.Pow(10, -2), 0),
+                new(-5.71926117404305781283f * MathF.Pow(10, -4), 0),
+                new(4.63399473359905636708f * MathF.Pow(10, -6), 0),
+                new(-2.71994908488607703910f * MathF.Pow(10, -9), 0)
+            };
+            ComplexNumber sum = d[0];
+            for(int i = 1; i < 10; i++)
+            {
+                sum += d[i] / (input + i);
+            }
+            ComplexNumber r = 2 * MathF.Sqrt(MathF.E / MathF.PI) * Pow((input + 10.9005f + 0.5f) / MathF.E, input + 0.5f) * sum;
+
+            Console.WriteLine(r);
+        }
+
+        #endregion
+
+        #region Complex Transformations
         /// <summary>
         /// Returns inverted value of a complex number.<br></br><br></br>
         /// </summary>
@@ -377,23 +441,7 @@ namespace ComplexNumbers
             ComplexNumber centerToZ = z - circleCenter;
             return centerToZ * radius * radius / (centerToZ.a * centerToZ.a + centerToZ.b * centerToZ.b);
         }
-
-        /// <summary>
-        /// Returns the conjugate of a complex number.<br></br>
-        /// (Multiplies the imaginary component by (-1))
-        /// </summary>
-        public ComplexNumber Conj()
-        {
-            return new ComplexNumber(a, -b);
-        }
-
-        /// <summary>
-        /// Swaps the values of a and b in a complex number.
-        /// </summary>
-        public ComplexNumber Swapped()
-        {
-            return new ComplexNumber(b, a);
-        }
+        #endregion
 
         /// <summary>
         /// Returns a complex number as a string.
@@ -426,7 +474,7 @@ namespace ComplexNumbers
             return outputString;
         }
 
-        #region Operators
+        #region Standard Operations
         public static ComplexNumber operator +(ComplexNumber z, float c) => new ComplexNumber(z.a + c, z.b);
         public static ComplexNumber operator +(float c, ComplexNumber z) => new ComplexNumber(z.a + c, z.b);
         public static ComplexNumber operator +(ComplexNumber z, int c) => new ComplexNumber(z.a + c, z.b);
@@ -480,6 +528,7 @@ namespace ComplexNumbers
 
         public static explicit operator ComplexNumber((float r, float theta)polar) 
             => new ComplexNumber(polar.r * MathF.Cos(polar.theta), polar.r * MathF.Sin(polar.theta));
+        #endregion
         #endregion
     }
 }

@@ -42,6 +42,7 @@ namespace ComplexNumbers
 
             Console.WriteLine($"W({22}): {ComplexNumber.ProductLog(22)}\n");
             Console.WriteLine($"W{new ComplexNumber(300, 7213)}: {ComplexNumber.ProductLog(new ComplexNumber(300, 7213))}\n");
+            ComplexNumber.Factorial(new(5, 0));
 
             while (true) ;
         }

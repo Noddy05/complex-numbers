@@ -35,12 +35,16 @@ namespace ComplexNumbers
             b = MathF.Sin(t);
         }
 
+        public static float Re(ComplexNumber z) => z.a;
+        public static float Im(ComplexNumber z) => z.b;
+
         /// <summary>
         /// Returns a float representing the complex numbers distance from the origin.<br></br><br></br>
         /// Formula: <br></br>
         /// √a²+b².
         /// </summary>
         public float Magnitude() => MathF.Sqrt(a * a + b * b);
+        public float SquareMagnitude() => a * a + b * b;
         /// <summary>
         /// Returns a float representing the angle of the complex number.<br></br><br></br>
         /// Formula: <br></br>
@@ -71,6 +75,15 @@ namespace ComplexNumbers
                 throw new DivideByZeroException();
 
             return new ComplexNumber(a, b) / mag;
+        }
+        /// <summary>
+        /// Normalized a complex number, so its distance from the origin is 1.<br><br></br></br>
+        /// Formula:<br></br>
+        /// z / z.Magnitude().
+        /// </summary>
+        public ComplexNumber Copy()
+        {
+            return new ComplexNumber(a, b);
         }
         /// <summary>
         /// Normalized a complex number, so its distance from the origin is 1.<br><br></br></br>
@@ -244,6 +257,99 @@ namespace ComplexNumbers
             float theta2 = z.Angle();
 
             return new ComplexNumber(MathF.Log(r2), theta2) / new ComplexNumber(MathF.Log(r1), theta1);
+        }
+
+        /// <summary>
+        /// Returns the product log of a complex number.<br></br><br></br>
+        /// Formula:<br></br>
+        /// (ln(r) + it) / ln(base).
+        /// </summary>
+
+        public static ComplexNumber ProductLog(ComplexNumber z)
+        {
+            ComplexNumber z_n = new(1, 1);
+            ComplexNumber prevZ_n = new(-1, -1);
+
+            Random rand = new Random();
+            //Checks until the floats cant compute any more precisely
+            while (Re(prevZ_n) != Re(z_n) && Im(prevZ_n) != Im(z_n))
+            {
+                prevZ_n = z_n.Copy();
+                if (Re(z_n) != Re(z_n) || Im(z_n) != Im(z_n))
+                {
+                    //If x_n is NaN a new starting estimate is set (one higher than the previous)
+                    //and this function will compute the product log and return it back to here
+                    return ProductLog(z, new ComplexNumber((float)rand.NextDouble() * 2 * MathF.PI)
+                        * (float)rand.NextDouble() * 0.25f);
+                }
+                z_n -= (z_n * Pow(MathF.E, z_n) - z) / ((z_n + 1) * Pow(MathF.E, z_n));
+            }
+
+            return z_n;
+        }
+        private static ComplexNumber ProductLog(ComplexNumber z, ComplexNumber startingEstimate)
+        {
+            ComplexNumber z_n = startingEstimate;
+            ComplexNumber prevZ_n = -startingEstimate;
+            if (startingEstimate.SquareMagnitude() == 0)
+                startingEstimate = -new ComplexNumber(1, 1);
+
+            Random rand = new Random();
+            //Checks until the floats cant compute any more precisely
+            while(Re(prevZ_n) != Re(z_n) && Im(prevZ_n) != Im(z_n))
+            {
+                prevZ_n = z_n.Copy();
+                if (Re(z_n) != Re(z_n) || Im(z_n) != Im(z_n))
+                {
+                    //If x_n is NaN a new starting estimate is set (one higher than the previous)
+                    //and this function will compute the product log and return it back to here
+                    return ProductLog(z, new ComplexNumber((float)rand.NextDouble() * 2 * MathF.PI) 
+                        * (float)rand.NextDouble() * (startingEstimate.Magnitude() + 0.25f));
+                }
+                z_n -= (z_n * Pow(MathF.E, z_n) - z) / ((z_n + 1) * Pow(MathF.E, z_n));
+            }
+
+            return z_n;
+        }
+
+        private static int passes = 0;
+        public static float ProductLog(float x)
+        {
+            float x_n = 1;
+            float prevX_n = -1;
+
+            //Checks until the floats cant compute any more precisely
+            while (MathF.Abs(x_n - prevX_n) != 0) {
+                if (x_n != x_n)
+                {
+                    //If x_n is NaN a new starting estimate is set (one higher than the previous)
+                    //and this function will compute the product log and return it back to here
+                    return ProductLog(x, 2);
+                }
+                prevX_n = x_n;
+                x_n -=(x_n * MathF.Pow(MathF.E, x_n) - x) / (x_n * (x_n * MathF.Pow(MathF.E, x_n) + MathF.Pow(MathF.E, x_n)));
+            }
+
+            return x_n;
+        }
+        private static float ProductLog(float x, float startingEstimate)
+        {
+            float x_n = startingEstimate;
+            float prevX_n = -startingEstimate;
+            if (startingEstimate == 0)
+                startingEstimate = -1;
+
+            //Checks until the floats cant compute any more precisely
+            while (MathF.Abs(x_n - prevX_n) != 0)
+            {
+                //If x_n is NaN the function is called recursively with a new starting estimate
+                if (x_n != x_n)
+                    return ProductLog(x, startingEstimate + 1);
+                prevX_n = x_n;
+                x_n -= (x_n * MathF.Pow(MathF.E, x_n) - x) / (x_n * (x_n * MathF.Pow(MathF.E, x_n) + MathF.Pow(MathF.E, x_n)));
+            }
+
+            return x_n;
         }
 
         /// <summary>

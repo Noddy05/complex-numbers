@@ -40,6 +40,9 @@ namespace ComplexNumbers
             Console.WriteLine($"cos{complexTrigonometri}: {ComplexNumber.Cos(complexTrigonometri)}\n");
             Console.WriteLine($"tan{complexTrigonometri}: {ComplexNumber.Tan(complexTrigonometri)}\n");
 
+            Console.WriteLine($"W({22}): {ComplexNumber.ProductLog(22)}\n");
+            Console.WriteLine($"W{new ComplexNumber(300, 7213)}: {ComplexNumber.ProductLog(new ComplexNumber(300, 7213))}\n");
+
             while (true) ;
         }
     }

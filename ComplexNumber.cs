@@ -387,7 +387,7 @@ namespace ComplexNumbers
         /// <summary>
         /// Returns a very rough estimation of the factorial factorial of a complex number.<br></br><br></br>
         /// </summary>
-        public static void Factorial(ComplexNumber input)
+        public static ComplexNumber Factorial(ComplexNumber input)
         {
             //double r = SpecialFunctions.Gamma(input);
             ComplexNumber[] d = new ComplexNumber[] { 
@@ -408,9 +408,28 @@ namespace ComplexNumbers
             {
                 sum += d[i] / (input + i);
             }
-            ComplexNumber r = 2 * MathF.Sqrt(MathF.E / MathF.PI) * Pow((input + 10.9005f + 0.5f) / MathF.E, input + 0.5f) * sum;
+            return 2 * MathF.Sqrt(MathF.E / MathF.PI) * Pow((input + 10.9005f + 0.5f) / MathF.E, input + 0.5f) * sum;
+        }
+        public static ComplexNumber ZetaFunction(ComplexNumber s, int iterations)
+        {
+            if (Re(s) <= 1)
+                return new ComplexNumber(0, 0);
 
-            Console.WriteLine(r);
+            ComplexNumber sum = new ComplexNumber(0, 0);
+            for (int i = 1; i <= iterations; i++)
+            {
+                sum += Pow(i, -s);
+            }
+
+            return sum;
+        }
+
+        //Defined for -∞ < Re(s) < 0 ∧ 1 < Re(s) < ∞
+        public static ComplexNumber AnalyticZetaFunction(ComplexNumber s, int iterations)
+        {
+            if(Re(s) < 0)
+                return Factorial(-s) * Pow(2 * MathF.PI, s - 1) * 2 * Cos(MathF.PI / 2 * (s - 1)) * ZetaFunction(1 - s, iterations);
+            return ZetaFunction(s, iterations);
         }
 
         #endregion
@@ -482,9 +501,9 @@ namespace ComplexNumbers
         public static ComplexNumber operator +(ComplexNumber z1, ComplexNumber z2) => new ComplexNumber(z1.a + z2.a, z1.b + z2.b);
         public static ComplexNumber operator -(ComplexNumber z) => new ComplexNumber(-z.a, -z.b);
         public static ComplexNumber operator -(ComplexNumber z, float c) => new ComplexNumber(z.a - c, z.b);
-        public static ComplexNumber operator -(float c, ComplexNumber z) => new ComplexNumber(z.a - c, z.b);
+        public static ComplexNumber operator -(float c, ComplexNumber z) => new ComplexNumber(c - z.a, -z.b);
         public static ComplexNumber operator -(ComplexNumber z, int c) => new ComplexNumber(z.a - c, z.b);
-        public static ComplexNumber operator -(int c, ComplexNumber z) => new ComplexNumber(z.a - c, z.b);
+        public static ComplexNumber operator -(int c, ComplexNumber z) => new ComplexNumber(c - z.a, -z.b);
         public static ComplexNumber operator -(ComplexNumber z1, ComplexNumber z2) => new ComplexNumber(z1.a - z2.a, z1.b - z2.b);
 
         public static ComplexNumber operator *(ComplexNumber z, float c) => new ComplexNumber(z.a * c, z.b * c);
